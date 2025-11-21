@@ -59,6 +59,7 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
       material: 'Material: 100% Genuine Italian Leather',
       dimensions: 'Dimensions: 30cm x 25cm x 12cm',
       care: 'Care: Wipe clean with a soft, dry cloth. Store in dust bag.',
+      share: 'Share this piece',
     },
     cart: {
       title: 'Your Shopping Bag',
@@ -120,6 +121,7 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
       material: 'الخامة: 100% جلد إيطالي طبيعي',
       dimensions: 'الأبعاد: 30 سم × 25 سم × 12 سم',
       care: 'العناية: تنظف بقطعة قماش ناعمة وجافة. تحفظ في كيس الغبار.',
+      share: 'شاركي هذه القطعة',
     },
     cart: {
       title: 'حقيبة التسوق',

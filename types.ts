@@ -67,6 +67,7 @@ export interface Translation {
     material: string;
     dimensions: string;
     care: string;
+    share: string;
   };
   cart: {
     title: string;
