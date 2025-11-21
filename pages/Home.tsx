@@ -7,48 +7,39 @@ import { TRANSLATIONS, MOCK_PRODUCTS, CATEGORY_NAMES } from '../constants';
 import { Button } from '../components/UI/Button';
 import { ProductCard } from '../components/Product/ProductCard';
 
-export const Home: React.FC = () => {
-  const { language } = useLanguage();
-  const navigate = useNavigate();
-  const tHero = TRANSLATIONS[language].hero;
-  const tSec = TRANSLATIONS[language].sections;
-  const featuredProducts = MOCK_PRODUCTS.slice(0, 3);
+// --- Reusable Marquee Component ---
+interface MarqueeProps {
+  speed: number;
+  className?: string;
+  children: React.ReactNode;
+}
 
-  // Marquee Refs & State
-  const marqueeRef = useRef<HTMLDivElement>(null);
+const Marquee: React.FC<MarqueeProps> = ({ speed, className = "", children }) => {
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const { language } = useLanguage();
 
-  // Logic for Second Marquee (JS-based for touch control)
   useEffect(() => {
-    const el = marqueeRef.current;
+    const el = scrollerRef.current;
     if (!el) return;
 
-    // Initial positioning for English (starts from right to move right visually? No, moves right means scroll decreases)
-    // Logic: 
-    // AR: Move Left (scrollLeft increases). Start at 0.
-    // EN: Move Right (scrollLeft decreases). Start at end.
-    if (language === 'en' && el.scrollLeft === 0) {
-       el.scrollLeft = el.scrollWidth - el.clientWidth;
-    }
-
     let animationId: number;
+    
+    // We duplicate content 4 times, so reset point is 1/4 of scrollWidth
+    // Wait, if we scroll Left, we increase scrollLeft.
+    // When we reach the end of the first set, we jump back to 0.
+    
     const animate = () => {
       if (!isPaused && el) {
-        // Speed 2.5 for "Faster" request (Standard is usually ~1px/frame)
-        const speed = 2.5; 
+        el.scrollLeft += speed;
         
-        if (language === 'ar') {
-           // AR: Move Left
-           el.scrollLeft += speed;
-           if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 1) {
-             el.scrollLeft = 0;
-           }
-        } else {
-           // EN: Move Right
-           el.scrollLeft -= speed;
-           if (el.scrollLeft <= 1) {
-             el.scrollLeft = el.scrollWidth - el.clientWidth;
-           }
+        // Reset logic for infinite loop
+        // If we've scrolled past the first set of content (approx), reset.
+        // Since we duplicate 4 times, we can reset when we reach 1/4 or 1/2.
+        // Safer to reset when >= scrollWidth / 2 if we duplicate even number of times.
+        // Let's use 4 copies. Reset at scrollWidth / 2 is safe.
+        if (el.scrollLeft >= el.scrollWidth / 2) {
+          el.scrollLeft = 0;
         }
       }
       animationId = requestAnimationFrame(animate);
@@ -56,7 +47,35 @@ export const Home: React.FC = () => {
 
     animationId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationId);
-  }, [language, isPaused]);
+  }, [speed, isPaused]);
+
+  return (
+    <div 
+      ref={scrollerRef}
+      className={`overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] cursor-grab active:cursor-grabbing ${className}`}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={() => setIsPaused(true)}
+      onTouchEnd={() => setIsPaused(false)}
+      dir="ltr" // Force LTR for consistent scrolling direction (Leftwards)
+    >
+      <div className="inline-flex items-center h-full">
+        {/* Render children multiple times for seamless loop */}
+        {children}
+        {children}
+        {children}
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export const Home: React.FC = () => {
+  const { language } = useLanguage();
+  const navigate = useNavigate();
+  const tHero = TRANSLATIONS[language].hero;
+  const tSec = TRANSLATIONS[language].sections;
+  const featuredProducts = MOCK_PRODUCTS.slice(0, 3);
 
   // Extract unique categories for the "Shop By Category" section
   const categories = ['Tote', 'Crossbody', 'Satchel', 'Clutch'];
@@ -98,50 +117,38 @@ export const Home: React.FC = () => {
   return (
     <div className="animate-fade-in flex flex-col pb-16 overflow-hidden bg-white dark:bg-gray-950">
       
-      {/* Marquee 1: General Info (CSS Animation) */}
-      <div className="bg-gray-900 text-white py-2.5 overflow-hidden relative z-20 border-b border-gray-800">
-        <div className={`whitespace-nowrap flex gap-8 items-center ${language === 'ar' ? 'animate-marquee-rtl' : 'animate-marquee'}`}>
-          {[...Array(10)].map((_, i) => (
-            <React.Fragment key={i}>
-              <span className={`text-xs font-bold uppercase flex items-center gap-3 ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
-                <Sparkles size={10} className="text-gold-400" /> 
-                {language === 'en' ? 'New Collection Available' : 'تشكيلة جديدة متاحة'}
-              </span>
-              <span className={`text-xs font-bold uppercase flex items-center gap-3 ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
-                <Sparkles size={10} className="text-gold-400" /> 
-                {language === 'en' ? 'Free Worldwide Shipping' : 'شحن مجاني لجميع أنحاء العالم'}
-              </span>
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
+      {/* Marquee 1: General Info (Slow) */}
+      <Marquee speed={0.8} className="bg-gray-900 text-white py-2.5 border-b border-gray-800">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className={`inline-flex items-center gap-8 mx-4 ${language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+            <span className={`text-xs font-bold uppercase flex items-center gap-3 ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
+              <Sparkles size={10} className="text-gold-400" /> 
+              {language === 'en' ? 'New Collection Available' : 'تشكيلة جديدة متاحة'}
+            </span>
+            <span className={`text-xs font-bold uppercase flex items-center gap-3 ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
+              <Sparkles size={10} className="text-gold-400" /> 
+              {language === 'en' ? 'Free Worldwide Shipping' : 'شحن مجاني لجميع أنحاء العالم'}
+            </span>
+          </div>
+        ))}
+      </Marquee>
 
-      {/* Marquee 2: Offers (Gold) - JS Controlled for Speed & Touch */}
-      <div className="bg-gold-400 text-gray-900 py-2 relative z-20 shadow-md group">
-        <div 
-          ref={marqueeRef}
-          className="flex gap-8 items-center overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] cursor-grab active:cursor-grabbing"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={() => setIsPaused(true)}
-          onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
-        >
-          {/* Repeat more times (20) to ensure smooth infinite scrolling feeling */}
-          {[...Array(20)].map((_, i) => (
-            <React.Fragment key={i}>
-              <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
-                <Tag size={14} fill="currentColor" className="text-gray-900" /> 
-                {language === 'en' ? 'SUMMER SALE: UP TO 40% OFF' : 'تخفيضات الصيف: خصم يصل إلى 40%'}
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
-              <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
-                {language === 'en' ? 'USE CODE: LUXURY25' : 'استخدمي كود: LUXURY25'}
-              </span>
-               <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
+      {/* Marquee 2: Offers (Fast) */}
+      <Marquee speed={2.5} className="bg-gold-400 text-gray-900 py-2 shadow-md">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className={`inline-flex items-center gap-8 mx-4 ${language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+            <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
+              <Tag size={14} fill="currentColor" className="text-gray-900" /> 
+              {language === 'en' ? 'SUMMER SALE: UP TO 40% OFF' : 'تخفيضات الصيف: خصم يصل إلى 40%'}
+            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
+            <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
+              {language === 'en' ? 'USE CODE: LUXURY25' : 'استخدمي كود: LUXURY25'}
+            </span>
+             <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
+          </div>
+        ))}
+      </Marquee>
 
       {/* Hero Section */}
       <div className="relative h-[85vh] w-full bg-gray-900 overflow-hidden group">
