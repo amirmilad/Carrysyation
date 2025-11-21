@@ -119,7 +119,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1299,
     category: "Tote",
-    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
     colors: ["Black", "Brown"]
   },
   {
@@ -143,7 +143,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1150,
     category: "Crossbody",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
     colors: ["Tan", "Navy"]
   },
   {
@@ -155,7 +155,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 2100,
     category: "Satchel",
-    image: "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
     colors: ["Burgundy", "Black"]
   },
   {
@@ -167,7 +167,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1450,
     category: "Shoulder",
-    image: "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1559563458-52c6952281ae?q=80&w=800&auto=format&fit=crop",
     colors: ["Cognac"]
   },
   {
@@ -191,7 +191,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 2400,
     category: "Shoulder",
-    image: "https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
     colors: ["Black", "Beige"]
   },
   {
@@ -203,7 +203,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1650,
     category: "Hobo",
-    image: "https://images.unsplash.com/photo-1605733513597-a8f8341084e6?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
     colors: ["Brown", "Grey"]
   },
   {
@@ -215,7 +215,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 750,
     category: "Tote",
-    image: "https://images.unsplash.com/photo-1604001307888-07f1c359a421?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1581605405669-fdaf8115b419?q=80&w=800&auto=format&fit=crop",
     colors: ["Beige"]
   },
   {
@@ -239,7 +239,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1550,
     category: "Crossbody",
-    image: "https://images.unsplash.com/photo-1616892683832-689a0c04631b?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1605733513597-a8f8341084e6?q=80&w=800&auto=format&fit=crop",
     colors: ["Tan", "Black"]
   },
   {
@@ -251,7 +251,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1350,
     category: "Bucket",
-    image: "https://images.unsplash.com/photo-1585218356057-1c4429a0f731?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1575296093822-987648884c9a?q=80&w=800&auto=format&fit=crop",
     colors: ["Navy", "Red"]
   }
 ];
