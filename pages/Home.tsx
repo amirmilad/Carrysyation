@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Truck, RefreshCw, Star, Mail, Sparkles } from 'lucide-react';
@@ -15,6 +16,8 @@ export const Home: React.FC = () => {
 
   // Extract unique categories for the "Shop By Category" section
   const categories = ['Tote', 'Crossbody', 'Satchel', 'Clutch'];
+  
+  // Using the same high-quality images defined in constants (mapped manually for the home display)
   const categoryImages: Record<string, string> = {
     'Tote': 'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=400&auto=format&fit=crop',
     'Crossbody': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=400&auto=format&fit=crop',
@@ -178,7 +181,7 @@ export const Home: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-20">
         <div className="relative rounded-2xl overflow-hidden h-[500px] shadow-2xl group">
           <img 
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=2053&auto=format&fit=crop" 
             alt="Promo"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />

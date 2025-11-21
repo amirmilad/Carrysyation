@@ -1,3 +1,4 @@
+
 export type Language = 'en' | 'ar';
 
 export interface Product {
@@ -13,6 +14,7 @@ export interface Product {
   price: number;
   category: string;
   image: string;
+  images?: string[]; // Optional array for gallery images
   colors: string[];
 }
 
@@ -51,6 +53,20 @@ export interface Translation {
     filter: string;
     addToCart: string;
     price: string;
+  };
+  product: {
+    details: string;
+    specifications: string;
+    shipping: string;
+    related: string;
+    askStylist: string;
+    color: string;
+    quantity: string;
+    addToCart: string;
+    description: string;
+    material: string;
+    dimensions: string;
+    care: string;
   };
   cart: {
     title: string;
