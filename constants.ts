@@ -326,9 +326,9 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1550,
     category: "Crossbody",
-    image: "https://images.unsplash.com/photo-1575296093822-987648884c9a?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1527383418406-f85a3b146499?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1575296093822-987648884c9a?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1527383418406-f85a3b146499?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[0]
     ],
     colors: ["Tan", "Black"]
@@ -342,9 +342,9 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1350,
     category: "Bucket",
-    image: "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1614179924047-e1ab49a0a0cf?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1614179924047-e1ab49a0a0cf?q=80&w=800&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[1]
     ],
