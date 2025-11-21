@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Truck, RefreshCw, Star, Mail, Sparkles, Tag } from 'lucide-react';
 import { useLanguage } from '../components/Contexts';
@@ -13,6 +13,50 @@ export const Home: React.FC = () => {
   const tHero = TRANSLATIONS[language].hero;
   const tSec = TRANSLATIONS[language].sections;
   const featuredProducts = MOCK_PRODUCTS.slice(0, 3);
+
+  // Marquee Refs & State
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Logic for Second Marquee (JS-based for touch control)
+  useEffect(() => {
+    const el = marqueeRef.current;
+    if (!el) return;
+
+    // Initial positioning for English (starts from right to move right visually? No, moves right means scroll decreases)
+    // Logic: 
+    // AR: Move Left (scrollLeft increases). Start at 0.
+    // EN: Move Right (scrollLeft decreases). Start at end.
+    if (language === 'en' && el.scrollLeft === 0) {
+       el.scrollLeft = el.scrollWidth - el.clientWidth;
+    }
+
+    let animationId: number;
+    const animate = () => {
+      if (!isPaused && el) {
+        // Speed 2.5 for "Faster" request (Standard is usually ~1px/frame)
+        const speed = 2.5; 
+        
+        if (language === 'ar') {
+           // AR: Move Left
+           el.scrollLeft += speed;
+           if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 1) {
+             el.scrollLeft = 0;
+           }
+        } else {
+           // EN: Move Right
+           el.scrollLeft -= speed;
+           if (el.scrollLeft <= 1) {
+             el.scrollLeft = el.scrollWidth - el.clientWidth;
+           }
+        }
+      }
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId);
+  }, [language, isPaused]);
 
   // Extract unique categories for the "Shop By Category" section
   const categories = ['Tote', 'Crossbody', 'Satchel', 'Clutch'];
@@ -54,7 +98,7 @@ export const Home: React.FC = () => {
   return (
     <div className="animate-fade-in flex flex-col pb-16 overflow-hidden bg-white dark:bg-gray-950">
       
-      {/* Marquee 1: General Info (Black) */}
+      {/* Marquee 1: General Info (CSS Animation) */}
       <div className="bg-gray-900 text-white py-2.5 overflow-hidden relative z-20 border-b border-gray-800">
         <div className={`whitespace-nowrap flex gap-8 items-center ${language === 'ar' ? 'animate-marquee-rtl' : 'animate-marquee'}`}>
           {[...Array(10)].map((_, i) => (
@@ -72,10 +116,18 @@ export const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Marquee 2: Offers (Gold) - Reverse Direction */}
-      <div className="bg-gold-400 text-gray-900 py-2 overflow-hidden relative z-20 shadow-md">
-        <div className={`whitespace-nowrap flex gap-8 items-center ${language === 'ar' ? 'animate-marquee' : 'animate-marquee-rtl'}`}>
-          {[...Array(10)].map((_, i) => (
+      {/* Marquee 2: Offers (Gold) - JS Controlled for Speed & Touch */}
+      <div className="bg-gold-400 text-gray-900 py-2 relative z-20 shadow-md group">
+        <div 
+          ref={marqueeRef}
+          className="flex gap-8 items-center overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] cursor-grab active:cursor-grabbing"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
+        >
+          {/* Repeat more times (20) to ensure smooth infinite scrolling feeling */}
+          {[...Array(20)].map((_, i) => (
             <React.Fragment key={i}>
               <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
                 <Tag size={14} fill="currentColor" className="text-gray-900" /> 
