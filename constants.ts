@@ -13,7 +13,14 @@ export const CATEGORY_NAMES: Record<string, { en: string; ar: string }> = {
   'Bucket': { en: 'Bucket Bag', ar: 'حقيبة دلو' },
 };
 
-export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
+export const TRANSLATIONS: Record<'en' | 'ar', Translation & { 
+  cart: { 
+    freeShippingMsg: string; 
+    freeShippingUnlocked: string;
+    promoPlaceholder: string;
+    apply: string;
+  }
+}> = {
   en: {
     nav: {
       home: 'Home',
@@ -67,6 +74,10 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
       total: 'Total',
       checkout: 'Proceed to Checkout',
       remove: 'Remove',
+      freeShippingMsg: 'Spend {amount} more for free shipping!',
+      freeShippingUnlocked: 'You have unlocked Free Shipping!',
+      promoPlaceholder: 'Promo Code',
+      apply: 'Apply'
     },
     ai: {
       title: 'AI Personal Stylist',
@@ -129,6 +140,10 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
       total: 'الإجمالي',
       checkout: 'إتمام الشراء',
       remove: 'حذف',
+      freeShippingMsg: 'أضيفي {amount} للحصول على شحن مجاني!',
+      freeShippingUnlocked: 'لقد حصلت على شحن مجاني!',
+      promoPlaceholder: 'كود الخصم',
+      apply: 'تطبيق'
     },
     ai: {
       title: 'مساعد الأزياء الذكي',

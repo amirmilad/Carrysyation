@@ -1,8 +1,9 @@
+
 import React, { useState, useMemo } from 'react';
 import { MOCK_PRODUCTS, TRANSLATIONS, CATEGORY_NAMES } from '../constants';
 import { ProductCard } from '../components/Product/ProductCard';
 import { useLanguage } from '../components/Contexts';
-import { Filter, X, ChevronDown, SlidersHorizontal } from 'lucide-react';
+import { Filter, X, ChevronDown, SlidersHorizontal, Check } from 'lucide-react';
 import { Product } from '../types';
 
 export const Shop: React.FC = () => {
@@ -60,90 +61,138 @@ export const Shop: React.FC = () => {
     );
   };
 
+  const resetFilters = () => {
+    setSelectedCategory('All');
+    setPriceRange([0, 5000]);
+    setSelectedColors([]);
+    setIsMobileFiltersOpen(false);
+  };
+
   return (
     <div className="min-h-screen pt-8 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in">
       
       {/* Header */}
-      <div className="flex flex-col gap-4 mb-8 border-b border-gray-200 dark:border-gray-800 pb-6">
-        <h1 className="text-4xl font-serif font-bold text-gray-900 dark:text-white">
+      <div className="flex flex-col items-center text-center gap-4 mb-12">
+        <h1 className="text-5xl font-serif font-bold text-gray-900 dark:text-white tracking-tight">
           {t.title}
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 max-w-2xl">
+        <div className="w-20 h-1 bg-gold-500 rounded-full"></div>
+        <p className="text-gray-500 dark:text-gray-400 max-w-2xl text-lg">
           {language === 'en' 
             ? 'Explore our curated collection of premium handcrafted leather bags, designed for elegance and durability.' 
             : 'استكشفي مجموعتنا المختارة من الحقائب الجلدية المصنوعة يدوياً، المصممة للأناقة والمتانة.'}
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
+      {/* Active Filters Chips */}
+      {(selectedCategory !== 'All' || selectedColors.length > 0 || priceRange[1] < 5000) && (
+         <div className="flex flex-wrap gap-2 mb-8 items-center justify-center">
+            <span className="text-sm text-gray-500 font-medium mr-2">{language === 'en' ? 'Active Filters:' : 'الفلاتر النشطة:'}</span>
+            
+            {selectedCategory !== 'All' && (
+               <button onClick={() => setSelectedCategory('All')} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                  {getCategoryName(selectedCategory)} <X size={14} />
+               </button>
+            )}
+
+            {selectedColors.map(c => (
+               <button key={c} onClick={() => toggleColor(c)} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                  <span className="w-3 h-3 rounded-full" style={{backgroundColor: c.toLowerCase()}}></span> {c} <X size={14} />
+               </button>
+            ))}
+
+             {priceRange[1] < 5000 && (
+               <button onClick={() => setPriceRange([0, 5000])} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                  Max: {priceRange[1]} <X size={14} />
+               </button>
+            )}
+
+            <button onClick={resetFilters} className="text-sm text-red-500 hover:underline ml-2">
+               {language === 'en' ? 'Clear All' : 'مسح الكل'}
+            </button>
+         </div>
+      )}
+
+      <div className="flex flex-col lg:flex-row gap-12">
         
         {/* Mobile Filter Toggle */}
         <button 
-          className="lg:hidden flex items-center justify-center gap-2 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg font-medium"
+          className="lg:hidden flex items-center justify-center gap-2 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg font-bold text-gray-900 dark:text-white shadow-sm"
           onClick={() => setIsMobileFiltersOpen(true)}
         >
           <SlidersHorizontal size={18} />
-          {language === 'en' ? 'Filters & Sort' : 'تصفية وترتيب'}
+          {language === 'en' ? 'Show Filters' : 'إظهار الفلاتر'}
         </button>
 
-        {/* Sidebar Filters (Desktop & Mobile Drawer) */}
+        {/* Sidebar Filters */}
         <aside className={`
           fixed inset-0 z-50 bg-white dark:bg-gray-900 p-6 lg:p-0 lg:static lg:bg-transparent lg:dark:bg-transparent lg:z-auto lg:w-64 lg:block
           transition-transform duration-300 overflow-y-auto lg:overflow-visible
           ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 rtl:translate-x-full lg:rtl:translate-x-0'}
         `}>
-          <div className="flex justify-between items-center mb-6 lg:hidden">
-            <h2 className="text-xl font-bold">{t.filter}</h2>
-            <button onClick={() => setIsMobileFiltersOpen(false)}><X /></button>
+          <div className="flex justify-between items-center mb-8 lg:hidden">
+            <h2 className="text-2xl font-bold font-serif">{t.filter}</h2>
+            <button onClick={() => setIsMobileFiltersOpen(false)} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full"><X /></button>
           </div>
 
-          <div className="space-y-8 sticky top-24">
+          <div className="space-y-10 sticky top-24">
             
-            {/* Sort Section (Mobile only here, or unified) */}
-            <div className="space-y-3">
-              <h3 className="font-bold text-gray-900 dark:text-white flex items-center justify-between">
-                {language === 'en' ? 'Sort By' : 'ترتيب حسب'}
-              </h3>
-              <select 
-                value={sortOption} 
-                onChange={(e) => setSortOption(e.target.value as any)}
-                className="w-full p-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-sm"
-              >
-                <option value="newest">{language === 'en' ? 'Newest Arrivals' : 'الأحدث وصولاً'}</option>
-                <option value="low">{language === 'en' ? 'Price: Low to High' : 'السعر: من الأقل للأعلى'}</option>
-                <option value="high">{language === 'en' ? 'Price: High to Low' : 'السعر: من الأعلى للأقل'}</option>
-              </select>
-            </div>
-
             {/* Categories */}
-            <div className="space-y-3">
-              <h3 className="font-bold text-gray-900 dark:text-white">{language === 'en' ? 'Categories' : 'التصنيفات'}</h3>
-              <div className="space-y-2">
+            <div className="space-y-4">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">{language === 'en' ? 'Categories' : 'التصنيفات'}</h3>
+              <div className="space-y-1">
                 {categories.map(cat => (
-                  <label key={cat} className="flex items-center gap-3 cursor-pointer group">
-                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                      selectedCategory === cat ? 'border-primary-500' : 'border-gray-300 dark:border-gray-600'
-                    }`}>
-                      {selectedCategory === cat && <div className="w-2 h-2 bg-primary-500 rounded-full" />}
+                  <label key={cat} className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
+                     selectedCategory === cat ? 'bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-white font-bold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}>
+                    <div className="flex items-center gap-3">
+                       <input 
+                        type="radio" 
+                        name="category" 
+                        className="hidden" 
+                        checked={selectedCategory === cat}
+                        onChange={() => setSelectedCategory(cat)}
+                      />
+                      <span>{getCategoryName(cat)}</span>
                     </div>
-                    <input 
-                      type="radio" 
-                      name="category" 
-                      className="hidden" 
-                      checked={selectedCategory === cat}
-                      onChange={() => setSelectedCategory(cat)}
-                    />
-                    <span className={`text-sm group-hover:text-primary-500 ${selectedCategory === cat ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-400'}`}>
-                      {getCategoryName(cat)}
-                    </span>
+                    {selectedCategory === cat && <Check size={16} />}
                   </label>
                 ))}
               </div>
             </div>
 
+            {/* Colors */}
+            <div className="space-y-4">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">{language === 'en' ? 'Colors' : 'الألوان'}</h3>
+              <div className="flex flex-wrap gap-3">
+                {allColors.map(color => (
+                  <button
+                    key={color}
+                    onClick={() => toggleColor(color)}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all relative ${
+                      selectedColors.includes(color) 
+                        ? 'ring-2 ring-offset-2 ring-primary-500 dark:ring-offset-gray-900' 
+                        : 'hover:scale-110 ring-1 ring-gray-200 dark:ring-gray-700'
+                    }`}
+                    title={color}
+                  >
+                     <div 
+                        className="w-full h-full rounded-full border border-black/5" 
+                        style={{ backgroundColor: color.toLowerCase() }}
+                      />
+                     {selectedColors.includes(color) && (
+                        <div className="absolute inset-0 flex items-center justify-center text-white mix-blend-difference">
+                           <Check size={16} strokeWidth={3} />
+                        </div>
+                     )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Price Range */}
-            <div className="space-y-3">
-              <h3 className="font-bold text-gray-900 dark:text-white">{language === 'en' ? 'Price Range' : 'نطاق السعر'}</h3>
+            <div className="space-y-4">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">{language === 'en' ? 'Price Range' : 'نطاق السعر'}</h3>
               <input 
                 type="range" 
                 min="0" 
@@ -151,89 +200,71 @@ export const Shop: React.FC = () => {
                 step="100"
                 value={priceRange[1]}
                 onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
               />
-              <div className="flex justify-between text-sm text-gray-500">
-                <span>0 EGP</span>
+              <div className="flex justify-between text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span>0</span>
                 <span>{priceRange[1].toLocaleString()} EGP</span>
               </div>
             </div>
-
-            {/* Colors */}
-            <div className="space-y-3">
-              <h3 className="font-bold text-gray-900 dark:text-white">{language === 'en' ? 'Colors' : 'الألوان'}</h3>
-              <div className="flex flex-wrap gap-2">
-                {allColors.map(color => (
-                  <button
-                    key={color}
-                    onClick={() => toggleColor(color)}
-                    className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
-                      selectedColors.includes(color) 
-                        ? 'border-primary-500 scale-110' 
-                        : 'border-transparent hover:scale-105'
-                    }`}
-                    title={color}
-                  >
-                     <div 
-                        className="w-6 h-6 rounded-full border border-gray-200 shadow-sm" 
-                        style={{ backgroundColor: color.toLowerCase() }}
-                      />
-                  </button>
-                ))}
-              </div>
-            </div>
             
-            <button 
-              onClick={() => {
-                setSelectedCategory('All');
-                setPriceRange([0, 5000]);
-                setSelectedColors([]);
-                setIsMobileFiltersOpen(false);
-              }}
-              className="text-sm text-gray-500 underline hover:text-red-500"
-            >
-              {language === 'en' ? 'Reset Filters' : 'إعادة تعيين الفلاتر'}
-            </button>
+             {/* Mobile Done Button */}
+             <div className="lg:hidden pt-4">
+                <button 
+                  onClick={() => setIsMobileFiltersOpen(false)}
+                  className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-lg"
+                >
+                   {language === 'en' ? 'Show Results' : 'عرض النتائج'}
+                </button>
+             </div>
           </div>
         </aside>
 
         {/* Main Grid */}
         <div className="flex-1">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-sm text-gray-500">
-              {language === 'en' ? `Showing ${filteredProducts.length} results` : `عرض ${filteredProducts.length} منتج`}
+          <div className="flex justify-between items-center mb-6 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg">
+            <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+              {language === 'en' ? `Showing ${filteredProducts.length} products` : `عرض ${filteredProducts.length} منتج`}
             </span>
             
             {/* Desktop Sort */}
-            <div className="hidden lg:flex items-center gap-2 text-sm">
+            <div className="hidden lg:flex items-center gap-3 text-sm">
               <span className="text-gray-500">{language === 'en' ? 'Sort by:' : 'ترتيب:'}</span>
-              <select 
-                value={sortOption} 
-                onChange={(e) => setSortOption(e.target.value as any)}
-                className="bg-transparent font-medium text-gray-900 dark:text-white focus:outline-none cursor-pointer"
-              >
-                <option value="newest">{language === 'en' ? 'Newest' : 'الأحدث'}</option>
-                <option value="low">{language === 'en' ? 'Price: Low to High' : 'الأقل سعراً'}</option>
-                <option value="high">{language === 'en' ? 'Price: High to Low' : 'الأعلى سعراً'}</option>
-              </select>
+              <div className="relative group">
+                 <select 
+                  value={sortOption} 
+                  onChange={(e) => setSortOption(e.target.value as any)}
+                  className="bg-transparent font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer pr-6 appearance-none z-10 relative"
+                >
+                  <option value="newest">{language === 'en' ? 'Newest Arrivals' : 'الأحدث'}</option>
+                  <option value="low">{language === 'en' ? 'Price: Low to High' : 'الأقل سعراً'}</option>
+                  <option value="high">{language === 'en' ? 'Price: High to Low' : 'الأعلى سعراً'}</option>
+                </select>
+                <ChevronDown size={14} className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
             {filteredProducts.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
           {filteredProducts.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <Filter size={48} className="text-gray-300 mb-4" />
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+            <div className="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-xl">
+              <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+                 <Filter size={32} className="text-gray-400" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                 {language === 'en' ? 'No products found' : 'لم يتم العثور على منتجات'}
               </h3>
-              <p className="text-gray-500">
-                {language === 'en' ? 'Try adjusting your filters.' : 'حاول تغيير خيارات التصفية.'}
+              <p className="text-gray-500 max-w-xs mx-auto mb-6">
+                {language === 'en' ? 'Try adjusting your filters or clear them to see all products.' : 'حاول تغيير خيارات التصفية أو قم بمسحها لعرض جميع المنتجات.'}
               </p>
+              <button onClick={resetFilters} className="text-primary-600 font-bold hover:underline">
+                 {language === 'en' ? 'Clear All Filters' : 'مسح جميع الفلاتر'}
+              </button>
             </div>
           )}
         </div>
