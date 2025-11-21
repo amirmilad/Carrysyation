@@ -293,7 +293,7 @@ export const Home: React.FC = () => {
                 placeholder={tSec.emailPlaceholder}
                 className="flex-1 px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gold-400 transition-all backdrop-blur-sm"
               />
-              <Button variant="secondary" className="px-10 py-4 rounded-full bg-white text-gray-900 hover:bg-gray-100 font-bold border-none shadow-lg transform hover:scale-105">
+              <Button variant="white" className="px-10 py-4 rounded-full font-bold shadow-lg transform hover:scale-105">
                 {tSec.subscribe}
               </Button>
             </form>
