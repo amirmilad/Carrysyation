@@ -44,7 +44,7 @@ export const Home: React.FC = () => {
   ];
 
   return (
-    <div className="animate-fade-in flex flex-col gap-16 pb-16 overflow-hidden">
+    <div className="animate-fade-in flex flex-col pb-16 overflow-hidden">
       
       {/* Marquee / News Ticker */}
       <div className="bg-gray-900 text-white py-2 overflow-hidden relative z-20">
@@ -95,7 +95,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* Features Banner */}
-      <div className="bg-white dark:bg-gray-900 -mt-16 relative z-10 max-w-6xl mx-auto w-11/12 shadow-xl rounded-xl py-8 px-6 border border-gray-100 dark:border-gray-800 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+      <div className="bg-white dark:bg-gray-900 -mt-16 relative z-10 max-w-6xl mx-auto w-11/12 shadow-xl rounded-xl py-8 px-6 border border-gray-100 dark:border-gray-800 animate-fade-in-up mb-20" style={{ animationDelay: '0.5s' }}>
         <div className="flex flex-wrap justify-around items-center gap-8">
           <div className="flex flex-col items-center text-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary-500 transition-colors">
             <div className="p-3 bg-primary-50 dark:bg-gray-800 rounded-full text-primary-600 animate-float">
@@ -121,7 +121,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* Categories Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-20">
         <h2 className="text-3xl font-serif font-bold text-center mb-12 text-gray-900 dark:text-white flex items-center justify-center gap-4">
           <span className="h-px w-12 bg-gray-300 dark:bg-gray-700"></span>
           {tSec.shopByCategory}
@@ -152,7 +152,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* Featured Collection */}
-      <div className="bg-gray-50 dark:bg-gray-800/50 py-16 w-full">
+      <div className="bg-gray-50 dark:bg-gray-800/50 py-16 w-full mb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-10">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white">
@@ -175,7 +175,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* Promo Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-20">
         <div className="relative rounded-2xl overflow-hidden h-[500px] shadow-2xl group">
           <img 
             src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop" 
@@ -201,7 +201,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* Testimonials */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-20">
         <h2 className="text-3xl font-serif font-bold text-center mb-12 text-gray-900 dark:text-white">
           {tSec.testimonials}
         </h2>

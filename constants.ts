@@ -119,7 +119,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1299,
     category: "Tote",
-    image: "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
     colors: ["Black", "Brown"]
   },
   {
@@ -191,7 +191,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 2400,
     category: "Shoulder",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
     colors: ["Black", "Beige"]
   },
   {
@@ -239,7 +239,7 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1550,
     category: "Crossbody",
-    image: "https://images.unsplash.com/photo-1605733513597-a8f8341084e6?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
     colors: ["Tan", "Black"]
   },
   {
