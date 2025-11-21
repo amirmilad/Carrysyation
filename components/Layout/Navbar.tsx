@@ -1,67 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Moon, Sun, Menu, X, Globe } from 'lucide-react';
+import { ShoppingBag, Moon, Sun, Menu, X, Globe, Search } from 'lucide-react';
 import { useTheme, useLanguage, useCart } from '../Contexts';
 import { TRANSLATIONS } from '../../constants';
 
 export const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
-  const { cartCount } = useCart();
+  const { cartCount, setIsCartOpen } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const t = TRANSLATIONS[language].nav;
 
-  const isActive = (path: string) => location.pathname === path ? 'text-primary-500 font-semibold' : 'text-gray-600 dark:text-gray-300 hover:text-primary-500';
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const isActive = (path: string) => location.pathname === path 
+    ? 'text-primary-600 dark:text-primary-400 font-semibold' 
+    : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400';
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+    <nav className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+      scrolled 
+        ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md py-2' 
+        : 'bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-4'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center">
           
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center rounded-sm font-serif font-bold text-xl transition-transform group-hover:scale-110">
+            <div className="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center rounded-sm font-serif font-bold text-2xl transition-transform group-hover:scale-105">
               C
             </div>
-            <span className="font-serif text-xl font-bold tracking-wide text-gray-900 dark:text-white">
-              CarryStation
-            </span>
+            <div className="flex flex-col">
+              <span className="font-serif text-xl font-bold tracking-wide text-gray-900 dark:text-white leading-none">
+                CarryStation
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Luxury Bags</span>
+            </div>
           </Link>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-            <Link to="/" className={isActive('/')}>{t.home}</Link>
-            <Link to="/shop" className={isActive('/shop')}>{t.shop}</Link>
-            <Link to="/shop" className={isActive('/about')}>{t.about}</Link>
+            <Link to="/" className={`text-sm uppercase tracking-widest transition-colors ${isActive('/')}`}>{t.home}</Link>
+            <Link to="/shop" className={`text-sm uppercase tracking-widest transition-colors ${isActive('/shop')}`}>{t.shop}</Link>
+            <Link to="/about" className={`text-sm uppercase tracking-widest transition-colors ${isActive('/about')}`}>{t.about}</Link>
           </div>
 
           {/* Icons & Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             
             {/* Theme Toggle */}
-            <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300">
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
 
             {/* Lang Toggle */}
             <button 
               onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')} 
-              className="flex items-center gap-1 text-sm font-medium hover:text-primary-500"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300 font-medium text-xs sm:text-sm"
             >
-              <Globe size={18} />
-              <span>{language === 'en' ? 'AR' : 'EN'}</span>
+              {language === 'en' ? 'AR' : 'EN'}
             </button>
 
-            {/* Cart */}
-            <Link to="/cart" className="relative p-2 hover:text-primary-500">
+            {/* Cart Trigger - Opens Drawer */}
+            <button 
+              onClick={() => setIsCartOpen(true)} 
+              className="relative p-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
               <ShoppingBag size={22} />
               {cartCount > 0 && (
-                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-primary-600 rounded-full">
                   {cartCount}
                 </span>
               )}
-            </Link>
+            </button>
 
             {/* Mobile Menu Button */}
             <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -73,11 +91,11 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">{t.home}</Link>
-            <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">{t.shop}</Link>
-            <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">{t.about}</Link>
+        <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 absolute w-full left-0 animate-fade-in-up z-30 shadow-lg">
+          <div className="px-4 pt-4 pb-6 space-y-2">
+            <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800">{t.home}</Link>
+            <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800">{t.shop}</Link>
+            <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800">{t.about}</Link>
           </div>
         </div>
       )}

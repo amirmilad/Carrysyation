@@ -22,12 +22,23 @@ interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product) => void;
   removeFromCart: (id: number) => void;
+  updateQuantity: (id: number, delta: number) => void;
   clearCart: () => void;
   total: number;
   cartCount: number;
+  isCartOpen: boolean;
+  setIsCartOpen: (isOpen: boolean) => void;
 }
 export const CartContext = createContext<CartContextType>({ 
-  cart: [], addToCart: () => {}, removeFromCart: () => {}, clearCart: () => {}, total: 0, cartCount: 0 
+  cart: [], 
+  addToCart: () => {}, 
+  removeFromCart: () => {}, 
+  updateQuantity: () => {},
+  clearCart: () => {}, 
+  total: 0, 
+  cartCount: 0,
+  isCartOpen: false,
+  setIsCartOpen: () => {}
 });
 export const useCart = () => useContext(CartContext);
 
@@ -41,6 +52,7 @@ export const AppProviders: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Cart State
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     // Handle Theme
@@ -69,10 +81,21 @@ export const AppProviders: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return [...prev, { ...product, quantity: 1 }];
     });
+    setIsCartOpen(true); // Auto open cart on add
   };
 
   const removeFromCart = (id: number) => {
     setCart(prev => prev.filter(item => item.id !== id));
+  };
+
+  const updateQuantity = (id: number, delta: number) => {
+    setCart(prev => prev.map(item => {
+      if (item.id === id) {
+        const newQty = Math.max(1, item.quantity + delta);
+        return { ...item, quantity: newQty };
+      }
+      return item;
+    }));
   };
 
   const clearCart = () => setCart([]);
@@ -83,7 +106,7 @@ export const AppProviders: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <LanguageContext.Provider value={{ language, setLanguage }}>
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, total, cartCount }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, total, cartCount, isCartOpen, setIsCartOpen }}>
           {children}
         </CartContext.Provider>
       </LanguageContext.Provider>
