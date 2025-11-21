@@ -7,116 +7,126 @@ import { TRANSLATIONS, MOCK_PRODUCTS, CATEGORY_NAMES } from '../constants';
 import { Button } from '../components/UI/Button';
 import { ProductCard } from '../components/Product/ProductCard';
 
-// --- Physics-Based Interactive Marquee (Re-built from scratch) ---
+// --- Physics-Based Interactive Marquee ---
 interface MarqueeProps {
-  baseSpeed: number; // Pixels per frame (e.g., 0.5 or 2.0)
-  className?: string;
+  speed?: number;
   children: React.ReactNode;
+  className?: string;
 }
 
-const Marquee: React.FC<MarqueeProps> = ({ baseSpeed, className = "", children }) => {
+const Marquee: React.FC<MarqueeProps> = ({ speed = 1, className = "", children }) => {
+  const { language } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   
-  // State to track movement
-  const positionRef = useRef(0);
-  const requestRef = useRef<number>(0);
-  const isDraggingRef = useRef(false);
-  const startXRef = useRef(0);
-  const lastXRef = useRef(0);
+  // State to hold content width
+  const [contentWidth, setContentWidth] = useState(0);
   
-  // Clone children to ensure infinite loop visual
-  // We repeat content 4 times to ensure it covers screen width + buffer
-  const clones = [0, 1, 2, 3]; 
+  // Animation & Interaction Refs
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const lastX = useRef(0);
+  const posRef = useRef(0);
+  const reqRef = useRef<number>(0);
+  
+  // 1 = Right (Arabic), -1 = Left (English)
+  // Moves in the direction of reading
+  const direction = language === 'ar' ? 1 : -1;
+
+  // Measure width and set initial position
+  useEffect(() => {
+    if (contentRef.current) {
+      // We use 3 clones to ensure infinite scroll coverage
+      const totalWidth = contentRef.current.scrollWidth;
+      const singleWidth = totalWidth / 3;
+      setContentWidth(singleWidth);
+
+      // Reset position based on direction to avoid visual glitches
+      // If moving Right (Arabic), start offset to the left so we have content to scroll into
+      if (language === 'ar') {
+         posRef.current = -singleWidth;
+      } else {
+         posRef.current = 0;
+      }
+      
+      // Update immediate transform
+      contentRef.current.style.transform = `translate3d(${posRef.current}px, 0, 0)`;
+    }
+  }, [language, children]);
 
   const animate = useCallback(() => {
-    if (!isDraggingRef.current && contentRef.current) {
-      // Move position by speed
-      positionRef.current -= baseSpeed;
+    if (!isDragging.current && contentWidth > 0) {
+      posRef.current += speed * direction;
 
-      const contentWidth = contentRef.current.scrollWidth / clones.length;
-      
-      // Infinite Loop Logic:
-      // If we have scrolled past the width of one clone set, reset position silently
-      if (positionRef.current <= -contentWidth) {
-        positionRef.current += contentWidth;
-      }
-      // Handle reverse case (if dragged too far right)
-      if (positionRef.current > 0) {
-        positionRef.current -= contentWidth;
+      // Infinite Loop Logic
+      if (direction === -1) {
+        // Moving Left (Standard LTR Marquee)
+        // When we have scrolled past the first clone, reset to 0 (or effectively add width)
+        if (posRef.current <= -contentWidth) {
+          posRef.current += contentWidth;
+        }
+      } else {
+        // Moving Right (RTL Marquee)
+        // When we reach 0 (the start of the track), jump back to -contentWidth
+        if (posRef.current >= 0) {
+          posRef.current -= contentWidth;
+        }
       }
 
-      // Apply transformation
       if (contentRef.current) {
-        contentRef.current.style.transform = `translateX(${positionRef.current}px)`;
+         contentRef.current.style.transform = `translate3d(${posRef.current}px, 0, 0)`;
       }
     }
-    requestRef.current = requestAnimationFrame(animate);
-  }, [baseSpeed, clones.length]);
+    reqRef.current = requestAnimationFrame(animate);
+  }, [speed, direction, contentWidth]);
 
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(requestRef.current);
+    reqRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(reqRef.current);
   }, [animate]);
 
-  // --- Touch / Drag Handlers ---
+  // Interaction Handlers
   const handleStart = (clientX: number) => {
-    isDraggingRef.current = true;
-    startXRef.current = clientX;
-    lastXRef.current = positionRef.current;
-    
-    // Add grabbing cursor class
+    isDragging.current = true;
+    startX.current = clientX;
+    lastX.current = posRef.current;
     if (containerRef.current) containerRef.current.style.cursor = 'grabbing';
+    
+    // Pause animation via ref check in animate(), but strictly speaking loop continues running
   };
 
   const handleMove = (clientX: number) => {
-    if (!isDraggingRef.current || !contentRef.current) return;
-    
-    const delta = clientX - startXRef.current;
-    positionRef.current = lastXRef.current + delta;
-    
-    contentRef.current.style.transform = `translateX(${positionRef.current}px)`;
+    if (!isDragging.current || !contentRef.current) return;
+    const delta = clientX - startX.current;
+    posRef.current = lastX.current + delta;
+    contentRef.current.style.transform = `translate3d(${posRef.current}px, 0, 0)`;
   };
 
   const handleEnd = () => {
-    isDraggingRef.current = false;
+    isDragging.current = false;
     if (containerRef.current) containerRef.current.style.cursor = 'grab';
   };
-
-  // Mouse Events
-  const onMouseDown = (e: React.MouseEvent) => handleStart(e.clientX);
-  const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
-  const onMouseUp = () => handleEnd();
-  const onMouseLeave = () => handleEnd();
-
-  // Touch Events
-  const onTouchStart = (e: React.TouchEvent) => handleStart(e.touches[0].clientX);
-  const onTouchMove = (e: React.TouchEvent) => handleMove(e.touches[0].clientX);
-  const onTouchEnd = () => handleEnd();
 
   return (
     <div 
       ref={containerRef}
       className={`overflow-hidden relative select-none cursor-grab touch-pan-y ${className}`}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseLeave}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      dir="ltr" // Force LTR so X-axis math is consistent (Negative = Left)
+      onMouseDown={e => handleStart(e.clientX)}
+      onMouseMove={e => handleMove(e.clientX)}
+      onMouseUp={handleEnd}
+      onMouseLeave={handleEnd}
+      onTouchStart={e => handleStart(e.touches[0].clientX)}
+      onTouchMove={e => handleMove(e.touches[0].clientX)}
+      onTouchEnd={handleEnd}
+      dir="ltr" // Force LTR so coordinate system is consistent (Left is negative X)
     >
-      <div 
-        ref={contentRef}
-        className="flex w-max items-center will-change-transform"
-      >
-        {clones.map((i) => (
-          <div key={i} className="flex-shrink-0 flex items-center">
-            {children}
-          </div>
-        ))}
-      </div>
+       <div ref={contentRef} className="flex w-max items-center will-change-transform">
+          {[0, 1, 2].map(i => (
+             <div key={i} className="flex-shrink-0 flex items-center">
+               {children}
+             </div>
+          ))}
+       </div>
     </div>
   );
 };
@@ -167,9 +177,8 @@ export const Home: React.FC = () => {
   return (
     <div className="animate-fade-in flex flex-col pb-16 overflow-hidden bg-white dark:bg-gray-950">
       
-      {/* Marquee 1: General Info (Slow - Speed 0.6) */}
-      <Marquee baseSpeed={0.6} className="bg-gray-900 text-white py-3 border-b border-gray-800 z-10 relative">
-        <div className={`flex items-center ${language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+      {/* Marquee 1: General Info (Slow) */}
+      <Marquee speed={0.8} className="bg-gray-900 text-white py-3 border-b border-gray-800 z-10 relative">
           <div className="flex items-center gap-8 px-4">
              <span className={`text-xs font-bold uppercase flex items-center gap-3 whitespace-nowrap ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
               <Sparkles size={12} className="text-gold-400" /> 
@@ -184,12 +193,10 @@ export const Home: React.FC = () => {
               {language === 'en' ? 'Authentic Italian Leather' : 'جلد إيطالي طبيعي'}
             </span>
           </div>
-        </div>
       </Marquee>
 
-      {/* Marquee 2: Offers (Fast - Speed 2.5) */}
-      <Marquee baseSpeed={2.5} className="bg-gold-400 text-gray-900 py-2.5 shadow-md z-10 relative">
-         <div className={`flex items-center ${language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+      {/* Marquee 2: Offers (Fast) */}
+      <Marquee speed={2.5} className="bg-gold-400 text-gray-900 py-2.5 shadow-md z-10 relative">
           <div className="flex items-center gap-12 px-6">
             <span className={`text-sm font-bold uppercase flex items-center gap-2 whitespace-nowrap ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
               <Tag size={16} fill="currentColor" className="text-gray-900" /> 
@@ -204,7 +211,6 @@ export const Home: React.FC = () => {
               {language === 'en' ? 'Limited Time Offer' : 'عرض لفترة محدودة'}
             </span>
           </div>
-        </div>
       </Marquee>
 
       {/* Hero Section */}
