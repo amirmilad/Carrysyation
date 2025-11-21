@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Star, Truck, Shield, ShoppingBag, Sparkles, Plus, Minus, ChevronLeft, ChevronRight, Facebook, Twitter } from 'lucide-react';
-import { MOCK_PRODUCTS, TRANSLATIONS } from '../constants';
+import { ArrowLeft, ArrowRight, Star, Truck, ShieldCheck, ShoppingBag, Sparkles, Plus, Minus, ChevronLeft, ChevronRight, Facebook, Twitter, Info, Ruler, CheckCircle } from 'lucide-react';
+import { MOCK_PRODUCTS, TRANSLATIONS, COLOR_NAMES } from '../constants';
 import { useLanguage, useCart } from '../components/Contexts';
 import { Button } from '../components/UI/Button';
 import { ProductCard } from '../components/Product/ProductCard';
@@ -21,6 +21,7 @@ export const ProductDetails: React.FC = () => {
 
   const product = MOCK_PRODUCTS.find(p => p.id === Number(id));
   const t = TRANSLATIONS[language].product;
+  const tCommon = TRANSLATIONS[language].common;
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -59,6 +60,10 @@ export const ProductDetails: React.FC = () => {
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length);
+  };
+  
+  const getColorName = (color: string) => {
+    return COLOR_NAMES[color]?.[language] || color;
   };
 
   const currentUrl = window.location.href;
@@ -115,7 +120,7 @@ export const ProductDetails: React.FC = () => {
               )}
 
               <div className="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white shadow-sm">
-                New Arrival
+                {tCommon.newArrival}
               </div>
             </div>
 
@@ -158,7 +163,7 @@ export const ProductDetails: React.FC = () => {
                 <Star size={18} fill="currentColor" />
                 <Star size={18} fill="currentColor" />
                 <Star size={18} fill="currentColor" />
-                <span className="text-gray-400 text-sm ml-2">(24 reviews)</span>
+                <span className="text-gray-400 text-sm ml-2">(24 {tCommon.reviews})</span>
               </div>
             </div>
 
@@ -170,7 +175,7 @@ export const ProductDetails: React.FC = () => {
               {/* Colors */}
               <div>
                 <span className="block text-sm font-bold text-gray-900 dark:text-white mb-3">
-                  {t.color}: <span className="font-normal text-gray-500">{selectedColor}</span>
+                  {t.color}: <span className="font-normal text-gray-500">{getColorName(selectedColor)}</span>
                 </span>
                 <div className="flex gap-3">
                   {product.colors.map((color) => (
@@ -182,11 +187,11 @@ export const ProductDetails: React.FC = () => {
                           ? 'border-primary-500 scale-110 ring-2 ring-primary-100 dark:ring-primary-900' 
                           : 'border-transparent hover:scale-105'
                       }`}
+                      title={getColorName(color)}
                     >
                       <div 
                         className="w-8 h-8 rounded-full border border-gray-200 shadow-sm" 
                         style={{ backgroundColor: color.toLowerCase() }}
-                        title={color}
                       />
                     </button>
                   ))}
@@ -267,12 +272,12 @@ export const ProductDetails: React.FC = () => {
             {/* Features List */}
             <div className="flex gap-6 text-sm text-gray-500 dark:text-gray-400 mb-8">
               <div className="flex items-center gap-2">
-                <Shield size={18} className="text-green-500" />
-                <span>2 Year Warranty</span>
+                <ShieldCheck size={18} className="text-green-500" />
+                <span>{tCommon.warranty}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Truck size={18} className="text-blue-500" />
-                <span>Free Shipping</span>
+                <span>{language === 'en' ? 'Free Shipping' : 'شحن مجاني'}</span>
               </div>
             </div>
 
@@ -295,17 +300,38 @@ export const ProductDetails: React.FC = () => {
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-300 min-h-[100px] leading-relaxed">
                 {activeTab === 'description' && (
-                  <p>{product.description[language]} {language === 'en' ? 'Handcrafted with precision to ensure durability and style.' : 'مصنوعة يدوياً بدقة لضمان المتانة والأناقة.'}</p>
+                  <div className="flex items-start gap-3">
+                     <Info className="flex-shrink-0 mt-1 text-primary-400" size={16} />
+                     <p>{product.description[language]} {language === 'en' ? 'Handcrafted with precision to ensure durability and style.' : 'مصنوعة يدوياً بدقة لضمان المتانة والأناقة.'}</p>
+                  </div>
                 )}
                 {activeTab === 'specs' && (
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>{t.material}</li>
-                    <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>{t.dimensions}</li>
-                    <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>{t.care}</li>
+                  <ul className="space-y-3">
+                    <li className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0 text-gray-500">
+                          <CheckCircle size={14} />
+                       </div>
+                       {t.material}
+                    </li>
+                    <li className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0 text-gray-500">
+                          <Ruler size={14} />
+                       </div>
+                       {t.dimensions}
+                    </li>
+                    <li className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0 text-gray-500">
+                          <Sparkles size={14} />
+                       </div>
+                       {t.care}
+                    </li>
                   </ul>
                 )}
                 {activeTab === 'shipping' && (
-                  <p>{language === 'en' ? 'Free worldwide shipping on all orders over 2000 EGP. Returns accepted within 30 days.' : 'شحن مجاني لجميع الطلبات التي تزيد عن 2000 جنيه. يقبل الاسترجاع خلال 30 يوماً.'}</p>
+                  <div className="flex items-start gap-3">
+                     <Truck className="flex-shrink-0 mt-1 text-primary-400" size={16} />
+                     <p>{language === 'en' ? 'Free worldwide shipping on all orders over 2000 EGP. Returns accepted within 30 days.' : 'شحن مجاني لجميع الطلبات التي تزيد عن 2000 جنيه. يقبل الاسترجاع خلال 30 يوماً.'}</p>
+                  </div>
                 )}
               </div>
             </div>

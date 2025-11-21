@@ -1,14 +1,15 @@
 
 import React, { useState, useMemo } from 'react';
-import { MOCK_PRODUCTS, TRANSLATIONS, CATEGORY_NAMES } from '../constants';
+import { MOCK_PRODUCTS, TRANSLATIONS, CATEGORY_NAMES, COLOR_NAMES } from '../constants';
 import { ProductCard } from '../components/Product/ProductCard';
 import { useLanguage } from '../components/Contexts';
-import { Filter, X, ChevronDown, SlidersHorizontal, Check } from 'lucide-react';
+import { Filter, X, ChevronDown, SlidersHorizontal, Check, Palette, Tag, Banknote } from 'lucide-react';
 import { Product } from '../types';
 
 export const Shop: React.FC = () => {
   const { language } = useLanguage();
   const t = TRANSLATIONS[language].shop;
+  const tCommon = TRANSLATIONS[language].common;
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   // Filter States
@@ -24,6 +25,10 @@ export const Shop: React.FC = () => {
   const getCategoryName = (cat: string) => {
     if (cat === 'All') return language === 'ar' ? 'الكل' : 'All';
     return CATEGORY_NAMES[cat]?.[language] || cat;
+  };
+  
+  const getColorName = (color: string) => {
+    return COLOR_NAMES[color]?.[language] || color;
   };
 
   const filteredProducts = useMemo(() => {
@@ -87,7 +92,7 @@ export const Shop: React.FC = () => {
       {/* Active Filters Chips */}
       {(selectedCategory !== 'All' || selectedColors.length > 0 || priceRange[1] < 5000) && (
          <div className="flex flex-wrap gap-2 mb-8 items-center justify-center">
-            <span className="text-sm text-gray-500 font-medium mr-2">{language === 'en' ? 'Active Filters:' : 'الفلاتر النشطة:'}</span>
+            <span className="text-sm text-gray-500 font-medium mr-2">{tCommon.activeFilters}</span>
             
             {selectedCategory !== 'All' && (
                <button onClick={() => setSelectedCategory('All')} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
@@ -97,18 +102,18 @@ export const Shop: React.FC = () => {
 
             {selectedColors.map(c => (
                <button key={c} onClick={() => toggleColor(c)} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  <span className="w-3 h-3 rounded-full" style={{backgroundColor: c.toLowerCase()}}></span> {c} <X size={14} />
+                  <span className="w-3 h-3 rounded-full" style={{backgroundColor: c.toLowerCase()}}></span> {getColorName(c)} <X size={14} />
                </button>
             ))}
 
              {priceRange[1] < 5000 && (
                <button onClick={() => setPriceRange([0, 5000])} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  Max: {priceRange[1]} <X size={14} />
+                  {language === 'en' ? 'Max:' : 'الحد الأقصى:'} {priceRange[1]} <X size={14} />
                </button>
             )}
 
             <button onClick={resetFilters} className="text-sm text-red-500 hover:underline ml-2">
-               {language === 'en' ? 'Clear All' : 'مسح الكل'}
+               {tCommon.clearAll}
             </button>
          </div>
       )}
@@ -121,7 +126,7 @@ export const Shop: React.FC = () => {
           onClick={() => setIsMobileFiltersOpen(true)}
         >
           <SlidersHorizontal size={18} />
-          {language === 'en' ? 'Show Filters' : 'إظهار الفلاتر'}
+          {t.filter}
         </button>
 
         {/* Sidebar Filters */}
@@ -139,7 +144,9 @@ export const Shop: React.FC = () => {
             
             {/* Categories */}
             <div className="space-y-4">
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">{language === 'en' ? 'Categories' : 'التصنيفات'}</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2 flex items-center gap-2">
+                 <Tag size={18} className="text-gray-400" /> {tCommon.categories}
+              </h3>
               <div className="space-y-1">
                 {categories.map(cat => (
                   <label key={cat} className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
@@ -163,7 +170,9 @@ export const Shop: React.FC = () => {
 
             {/* Colors */}
             <div className="space-y-4">
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">{language === 'en' ? 'Colors' : 'الألوان'}</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2 flex items-center gap-2">
+                <Palette size={18} className="text-gray-400" /> {tCommon.colors}
+              </h3>
               <div className="flex flex-wrap gap-3">
                 {allColors.map(color => (
                   <button
@@ -174,7 +183,7 @@ export const Shop: React.FC = () => {
                         ? 'ring-2 ring-offset-2 ring-primary-500 dark:ring-offset-gray-900' 
                         : 'hover:scale-110 ring-1 ring-gray-200 dark:ring-gray-700'
                     }`}
-                    title={color}
+                    title={getColorName(color)}
                   >
                      <div 
                         className="w-full h-full rounded-full border border-black/5" 
@@ -192,7 +201,9 @@ export const Shop: React.FC = () => {
 
             {/* Price Range */}
             <div className="space-y-4">
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">{language === 'en' ? 'Price Range' : 'نطاق السعر'}</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2 flex items-center gap-2">
+                <Banknote size={18} className="text-gray-400" /> {tCommon.priceRange}
+              </h3>
               <input 
                 type="range" 
                 min="0" 
@@ -214,7 +225,7 @@ export const Shop: React.FC = () => {
                   onClick={() => setIsMobileFiltersOpen(false)}
                   className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-lg"
                 >
-                   {language === 'en' ? 'Show Results' : 'عرض النتائج'}
+                   {tCommon.showResults}
                 </button>
              </div>
           </div>
@@ -229,16 +240,16 @@ export const Shop: React.FC = () => {
             
             {/* Desktop Sort */}
             <div className="hidden lg:flex items-center gap-3 text-sm">
-              <span className="text-gray-500">{language === 'en' ? 'Sort by:' : 'ترتيب:'}</span>
+              <span className="text-gray-500">{tCommon.sort}</span>
               <div className="relative group">
                  <select 
                   value={sortOption} 
                   onChange={(e) => setSortOption(e.target.value as any)}
                   className="bg-transparent font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer pr-6 appearance-none z-10 relative"
                 >
-                  <option value="newest">{language === 'en' ? 'Newest Arrivals' : 'الأحدث'}</option>
-                  <option value="low">{language === 'en' ? 'Price: Low to High' : 'الأقل سعراً'}</option>
-                  <option value="high">{language === 'en' ? 'Price: High to Low' : 'الأعلى سعراً'}</option>
+                  <option value="newest">{tCommon.sortNewest}</option>
+                  <option value="low">{tCommon.sortLowHigh}</option>
+                  <option value="high">{tCommon.sortHighLow}</option>
                 </select>
                 <ChevronDown size={14} className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
@@ -257,13 +268,13 @@ export const Shop: React.FC = () => {
                  <Filter size={32} className="text-gray-400" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                {language === 'en' ? 'No products found' : 'لم يتم العثور على منتجات'}
+                {tCommon.noProducts}
               </h3>
               <p className="text-gray-500 max-w-xs mx-auto mb-6">
-                {language === 'en' ? 'Try adjusting your filters or clear them to see all products.' : 'حاول تغيير خيارات التصفية أو قم بمسحها لعرض جميع المنتجات.'}
+                {tCommon.tryAdjusting}
               </p>
               <button onClick={resetFilters} className="text-primary-600 font-bold hover:underline">
-                 {language === 'en' ? 'Clear All Filters' : 'مسح جميع الفلاتر'}
+                 {tCommon.clearAll}
               </button>
             </div>
           )}

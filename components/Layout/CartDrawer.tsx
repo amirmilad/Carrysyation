@@ -174,7 +174,7 @@ export const CartDrawer: React.FC = () => {
                 <span>{total.toLocaleString()} EGP</span>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                {language === 'en' ? 'Shipping & taxes calculated at checkout' : 'يتم حساب الشحن والضرائب عند الدفع'}
+                {t.taxesMsg}
               </p>
             </div>
             

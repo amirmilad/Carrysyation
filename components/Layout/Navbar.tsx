@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Moon, Sun, Menu, X, Globe, Search, Briefcase } from 'lucide-react';
+import { ShoppingBag, Moon, Sun, Menu, X, Globe, Search, User, Gem } from 'lucide-react';
 import { useTheme, useLanguage, useCart } from '../Contexts';
 import { TRANSLATIONS } from '../../constants';
 
@@ -52,7 +52,7 @@ export const Navbar: React.FC = () => {
                 CarryStation
               </span>
               <span className="text-[10px] uppercase tracking-[0.35em] text-primary-600 dark:text-gold-400 font-bold mt-1 ml-0.5">
-                Luxury Store
+                {language === 'en' ? 'Luxury Store' : 'متجر فاخر'}
               </span>
             </div>
           </Link>
@@ -65,7 +65,17 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Icons & Actions */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+
+             {/* Search (Visual) */}
+             <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300 hidden sm:block">
+              <Search size={20} />
+            </button>
+
+             {/* User (Visual) */}
+             <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300 hidden sm:block">
+              <User size={20} />
+            </button>
             
             {/* Theme Toggle */}
             <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300">

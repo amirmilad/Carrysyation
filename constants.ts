@@ -13,12 +13,50 @@ export const CATEGORY_NAMES: Record<string, { en: string; ar: string }> = {
   'Bucket': { en: 'Bucket Bag', ar: 'حقيبة دلو' },
 };
 
+export const COLOR_NAMES: Record<string, { en: string; ar: string }> = {
+  'Brown': { en: 'Brown', ar: 'بني' },
+  'Black': { en: 'Black', ar: 'أسود' },
+  'Pink': { en: 'Pink', ar: 'وردي' },
+  'Silver': { en: 'Silver', ar: 'فضي' },
+  'Gold': { en: 'Gold', ar: 'ذهبي' },
+  'Tan': { en: 'Tan', ar: 'أسمر' },
+  'Green': { en: 'Green', ar: 'أخضر' },
+  'Blue': { en: 'Blue', ar: 'أزرق' },
+  'Cognac': { en: 'Cognac', ar: 'كونياك' },
+  'Yellow': { en: 'Yellow', ar: 'أصفر' },
+  'Beige': { en: 'Beige', ar: 'بيج' },
+  'Grey': { en: 'Grey', ar: 'رمادي' },
+  'Natural': { en: 'Natural', ar: 'طبيعي' },
+  'White': { en: 'White', ar: 'أبيض' },
+  'Navy': { en: 'Navy', ar: 'كحلي' },
+  'Red': { en: 'Red', ar: 'أحمر' }
+};
+
 export const TRANSLATIONS: Record<'en' | 'ar', Translation & { 
   cart: { 
     freeShippingMsg: string; 
     freeShippingUnlocked: string;
     promoPlaceholder: string;
     apply: string;
+    taxesMsg: string;
+  };
+  common: {
+    newArrival: string;
+    reviews: string;
+    warranty: string;
+    verifiedBuyer: string;
+    activeFilters: string;
+    clearAll: string;
+    showResults: string;
+    noProducts: string;
+    tryAdjusting: string;
+    colors: string;
+    categories: string;
+    priceRange: string;
+    sort: string;
+    sortNewest: string;
+    sortLowHigh: string;
+    sortHighLow: string;
   }
 }> = {
   en: {
@@ -77,7 +115,8 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation & {
       freeShippingMsg: 'Spend {amount} more for free shipping!',
       freeShippingUnlocked: 'You have unlocked Free Shipping!',
       promoPlaceholder: 'Promo Code',
-      apply: 'Apply'
+      apply: 'Apply',
+      taxesMsg: 'Shipping & taxes calculated at checkout'
     },
     ai: {
       title: 'AI Personal Stylist',
@@ -85,6 +124,24 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation & {
       send: 'Ask Stylist',
       thinking: 'Styling...',
       suggest: 'Get Style Advice',
+    },
+    common: {
+      newArrival: 'New Arrival',
+      reviews: 'reviews',
+      warranty: '2 Year Warranty',
+      verifiedBuyer: 'Verified Buyer',
+      activeFilters: 'Active Filters:',
+      clearAll: 'Clear All',
+      showResults: 'Show Results',
+      noProducts: 'No products found',
+      tryAdjusting: 'Try adjusting your filters or clear them to see all products.',
+      colors: 'Colors',
+      categories: 'Categories',
+      priceRange: 'Price Range',
+      sort: 'Sort by:',
+      sortNewest: 'Newest Arrivals',
+      sortLowHigh: 'Price: Low to High',
+      sortHighLow: 'Price: High to Low',
     }
   },
   ar: {
@@ -143,7 +200,8 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation & {
       freeShippingMsg: 'أضيفي {amount} للحصول على شحن مجاني!',
       freeShippingUnlocked: 'لقد حصلت على شحن مجاني!',
       promoPlaceholder: 'كود الخصم',
-      apply: 'تطبيق'
+      apply: 'تطبيق',
+      taxesMsg: 'يتم حساب الشحن والضرائب عند الدفع'
     },
     ai: {
       title: 'مساعد الأزياء الذكي',
@@ -151,6 +209,24 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation & {
       send: 'اسألي المساعد',
       thinking: 'جاري التفكير...',
       suggest: 'احصلي على نصيحة',
+    },
+    common: {
+      newArrival: 'وصل حديثاً',
+      reviews: 'تقييمات',
+      warranty: 'ضمان سنتين',
+      verifiedBuyer: 'عميل موثق',
+      activeFilters: 'الفلاتر النشطة:',
+      clearAll: 'مسح الكل',
+      showResults: 'عرض النتائج',
+      noProducts: 'لم يتم العثور على منتجات',
+      tryAdjusting: 'حاولي تغيير خيارات التصفية أو قومي بمسحها لعرض جميع المنتجات.',
+      colors: 'الألوان',
+      categories: 'التصنيفات',
+      priceRange: 'نطاق السعر',
+      sort: 'ترتيب حسب:',
+      sortNewest: 'الأحدث وصولاً',
+      sortLowHigh: 'السعر: الأقل للأعلى',
+      sortHighLow: 'السعر: الأعلى للأقل',
     }
   },
 };

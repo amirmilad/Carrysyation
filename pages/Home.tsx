@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Truck, RefreshCw, Star, Mail, Sparkles, Tag } from 'lucide-react';
+import { ArrowRight, Gem, Plane, RotateCcw, Star, Mail, Sparkles, Tag, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../components/Contexts';
 import { TRANSLATIONS, MOCK_PRODUCTS, CATEGORY_NAMES } from '../constants';
 import { Button } from '../components/UI/Button';
@@ -136,6 +136,7 @@ export const Home: React.FC = () => {
   const navigate = useNavigate();
   const tHero = TRANSLATIONS[language].hero;
   const tSec = TRANSLATIONS[language].sections;
+  const tCommon = TRANSLATIONS[language].common;
   const featuredProducts = MOCK_PRODUCTS.slice(0, 3);
 
   // Extract unique categories for the "Shop By Category" section
@@ -267,7 +268,7 @@ export const Home: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors group">
             <div className="p-4 bg-primary-50 dark:bg-gray-800 rounded-full text-primary-600 mb-4 group-hover:scale-110 transition-transform duration-300">
-              <ShieldCheck size={32} />
+              <Gem size={32} strokeWidth={1.5} />
             </div>
             <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{language === 'en' ? 'Authentic Leather' : 'جلد طبيعي أصلي'}</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -276,7 +277,7 @@ export const Home: React.FC = () => {
           </div>
           <div className="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors group">
             <div className="p-4 bg-primary-50 dark:bg-gray-800 rounded-full text-primary-600 mb-4 group-hover:scale-110 transition-transform duration-300">
-              <Truck size={32} />
+              <Plane size={32} strokeWidth={1.5} />
             </div>
             <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{language === 'en' ? 'Global Shipping' : 'شحن عالمي'}</h3>
              <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -285,7 +286,7 @@ export const Home: React.FC = () => {
           </div>
           <div className="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors group">
             <div className="p-4 bg-primary-50 dark:bg-gray-800 rounded-full text-primary-600 mb-4 group-hover:scale-110 transition-transform duration-300">
-              <RefreshCw size={32} />
+              <RotateCcw size={32} strokeWidth={1.5} />
             </div>
             <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{language === 'en' ? 'Easy Returns' : 'استرجاع سهل'}</h3>
              <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -407,7 +408,9 @@ export const Home: React.FC = () => {
                    </div>
                    <div>
                       <h4 className="font-bold text-gray-900 dark:text-white text-sm">{item.name}</h4>
-                      <span className="text-xs text-gray-400 uppercase tracking-wide">Verified Buyer</span>
+                      <span className="text-xs text-gray-400 uppercase tracking-wide flex items-center gap-1">
+                        {tCommon.verifiedBuyer} <CheckCircle size={10} className="text-green-500" />
+                      </span>
                    </div>
                 </div>
               </div>
