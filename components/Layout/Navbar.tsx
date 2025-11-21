@@ -33,17 +33,27 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           
-          {/* Logo */}
+          {/* 3D Professional Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center rounded-sm transition-transform group-hover:scale-105 shadow-lg">
-              {/* SVG Logo Mark */}
-              <Briefcase strokeWidth={2.5} size={20} />
+            <div className="relative w-11 h-11">
+                {/* Shadow Layer for 3D Depth */}
+                <div className="absolute inset-0 bg-primary-900/20 dark:bg-black/50 rounded-xl transform translate-y-1.5 translate-x-1.5 blur-[1px]"></div>
+                
+                {/* Main 3D Shape */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gold-400 via-primary-600 to-primary-800 rounded-xl flex items-center justify-center shadow-inner border-t border-l border-white/30 group-hover:scale-105 transition-transform duration-300">
+                  {/* Inner Glow */}
+                  <div className="absolute inset-1 bg-gradient-to-br from-white/10 to-black/10 rounded-lg"></div>
+                  <ShoppingBag className="text-white drop-shadow-md relative z-10" size={22} strokeWidth={2.5} />
+                </div>
             </div>
+            
             <div className="flex flex-col">
-              <span className="font-serif text-xl font-bold tracking-wide text-gray-900 dark:text-white leading-none">
+              <span className="font-serif text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-gray-400 leading-none drop-shadow-sm">
                 CarryStation
               </span>
-              <span className="text-[10px] uppercase tracking-[0.25em] text-gray-500 dark:text-gray-400 mt-0.5">Luxury Bags</span>
+              <span className="text-[10px] uppercase tracking-[0.35em] text-primary-600 dark:text-gold-400 font-bold mt-1 ml-0.5">
+                Luxury Store
+              </span>
             </div>
           </Link>
 
@@ -77,7 +87,7 @@ export const Navbar: React.FC = () => {
             >
               <ShoppingBag size={22} />
               {cartCount > 0 && (
-                <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-primary-600 rounded-full">
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-primary-600 rounded-full border border-white dark:border-gray-900">
                   {cartCount}
                 </span>
               )}

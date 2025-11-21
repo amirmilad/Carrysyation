@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Truck, RefreshCw, Star, Mail, Sparkles } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Truck, RefreshCw, Star, Mail, Sparkles, Tag } from 'lucide-react';
 import { useLanguage } from '../components/Contexts';
 import { TRANSLATIONS, MOCK_PRODUCTS, CATEGORY_NAMES } from '../constants';
 import { Button } from '../components/UI/Button';
@@ -54,19 +54,38 @@ export const Home: React.FC = () => {
   return (
     <div className="animate-fade-in flex flex-col pb-16 overflow-hidden bg-white dark:bg-gray-950">
       
-      {/* Marquee / News Ticker */}
+      {/* Marquee 1: General Info (Black) */}
       <div className="bg-gray-900 text-white py-2.5 overflow-hidden relative z-20 border-b border-gray-800">
         <div className={`whitespace-nowrap flex gap-8 items-center ${language === 'ar' ? 'animate-marquee-rtl' : 'animate-marquee'}`}>
           {[...Array(10)].map((_, i) => (
             <React.Fragment key={i}>
-              <span className="text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-3">
+              <span className={`text-xs font-bold uppercase flex items-center gap-3 ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
                 <Sparkles size={10} className="text-gold-400" /> 
                 {language === 'en' ? 'New Collection Available' : 'تشكيلة جديدة متاحة'}
               </span>
-              <span className="text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-3">
+              <span className={`text-xs font-bold uppercase flex items-center gap-3 ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
                 <Sparkles size={10} className="text-gold-400" /> 
                 {language === 'en' ? 'Free Worldwide Shipping' : 'شحن مجاني لجميع أنحاء العالم'}
               </span>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      {/* Marquee 2: Offers (Gold) - Reverse Direction */}
+      <div className="bg-gold-400 text-gray-900 py-2 overflow-hidden relative z-20 shadow-md">
+        <div className={`whitespace-nowrap flex gap-8 items-center ${language === 'ar' ? 'animate-marquee' : 'animate-marquee-rtl'}`}>
+          {[...Array(10)].map((_, i) => (
+            <React.Fragment key={i}>
+              <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
+                <Tag size={14} fill="currentColor" className="text-gray-900" /> 
+                {language === 'en' ? 'SUMMER SALE: UP TO 40% OFF' : 'تخفيضات الصيف: خصم يصل إلى 40%'}
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
+              <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
+                {language === 'en' ? 'USE CODE: LUXURY25' : 'استخدمي كود: LUXURY25'}
+              </span>
+               <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
             </React.Fragment>
           ))}
         </div>
