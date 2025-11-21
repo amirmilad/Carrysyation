@@ -1,5 +1,17 @@
 import { Product, Translation } from './types';
 
+export const CATEGORY_NAMES: Record<string, { en: string; ar: string }> = {
+  'Tote': { en: 'Tote Bag', ar: 'حقيبة توت' },
+  'Clutch': { en: 'Clutch', ar: 'كلتش' },
+  'Crossbody': { en: 'Crossbody', ar: 'كروس' },
+  'Satchel': { en: 'Satchel', ar: 'حقيبة ساتشل' },
+  'Shoulder': { en: 'Shoulder Bag', ar: 'حقيبة كتف' },
+  'Backpack': { en: 'Backpack', ar: 'حقيبة ظهر' },
+  'Hobo': { en: 'Hobo Bag', ar: 'حقيبة هوبو' },
+  'Mini': { en: 'Mini Bag', ar: 'حقيبة صغيرة' },
+  'Bucket': { en: 'Bucket Bag', ar: 'حقيبة دلو' },
+};
+
 export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
   en: {
     nav: {
@@ -13,6 +25,19 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
       title: 'Elevate Your Style',
       subtitle: 'Discover the finest collection of handcrafted leather bags designed for the modern woman.',
       cta: 'Shop Now',
+    },
+    sections: {
+      shopByCategory: 'Shop by Category',
+      featured: 'Featured Collection',
+      viewAll: 'View All',
+      testimonials: 'What Our Clients Say',
+      newsletterTitle: 'Join the Club',
+      newsletterDesc: 'Subscribe to receive updates, access to exclusive deals, and more.',
+      subscribe: 'Subscribe',
+      emailPlaceholder: 'Enter your email address',
+      promoTitle: 'The Summer Edition',
+      promoSubtitle: 'Lightweight, durable, and effortlessly chic.',
+      promoBtn: 'Explore Collection'
     },
     shop: {
       title: 'Latest Collection',
@@ -47,6 +72,19 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
       title: 'ارتقي بأسلوبك',
       subtitle: 'اكتشفي أرقى مجموعة من الحقائب المصنوعة يدوياً للمرأة العصرية.',
       cta: 'تسوقي الآن',
+    },
+    sections: {
+      shopByCategory: 'تسوقي حسب الفئة',
+      featured: 'مجموعة مميزة',
+      viewAll: 'عرض الكل',
+      testimonials: 'آراء عملائنا',
+      newsletterTitle: 'انضمي لقائمتنا البريدية',
+      newsletterDesc: 'اشتركي للحصول على آخر التحديثات وعروض حصرية.',
+      subscribe: 'اشترك',
+      emailPlaceholder: 'أدخلي بريدك الإلكتروني',
+      promoTitle: 'إصدار الصيف',
+      promoSubtitle: 'خفيفة، متينة، وأنيقة بلا مجهود.',
+      promoBtn: 'اكتشفي المجموعة'
     },
     shop: {
       title: 'أحدث التشكيلات',

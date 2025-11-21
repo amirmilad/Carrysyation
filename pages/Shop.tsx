@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MOCK_PRODUCTS, TRANSLATIONS } from '../constants';
+import { MOCK_PRODUCTS, TRANSLATIONS, CATEGORY_NAMES } from '../constants';
 import { ProductCard } from '../components/Product/ProductCard';
 import { useLanguage } from '../components/Contexts';
 import { Filter } from 'lucide-react';
@@ -14,6 +14,13 @@ export const Shop: React.FC = () => {
   const filteredProducts = category === 'All' 
     ? MOCK_PRODUCTS 
     : MOCK_PRODUCTS.filter(p => p.category === category);
+
+  const getCategoryName = (cat: string) => {
+    if (cat === 'All') {
+      return language === 'ar' ? 'الكل' : 'All';
+    }
+    return CATEGORY_NAMES[cat]?.[language] || cat;
+  };
 
   return (
     <div className="min-h-screen pt-8 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in">
@@ -35,7 +42,7 @@ export const Shop: React.FC = () => {
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
               }`}
             >
-              {cat}
+              {getCategoryName(cat)}
             </button>
           ))}
         </div>
@@ -49,7 +56,7 @@ export const Shop: React.FC = () => {
       
       {filteredProducts.length === 0 && (
         <div className="text-center py-20 text-gray-500">
-          No products found in this category.
+          {language === 'ar' ? 'لا توجد منتجات في هذا القسم.' : 'No products found in this category.'}
         </div>
       )}
     </div>

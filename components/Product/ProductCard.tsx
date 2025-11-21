@@ -1,5 +1,6 @@
 import React from 'react';
 import { Product } from '../../types';
+import { CATEGORY_NAMES } from '../../constants';
 import { useLanguage, useCart } from '../Contexts';
 import { Button } from '../UI/Button';
 import { ShoppingCart } from 'lucide-react';
@@ -11,6 +12,9 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { language } = useLanguage();
   const { addToCart } = useCart();
+
+  // Fallback if category is not found in map
+  const categoryName = CATEGORY_NAMES[product.category]?.[language] || product.category;
 
   return (
     <div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex flex-col">
@@ -34,7 +38,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </div>
       <div className="p-4 flex flex-col flex-grow">
         <div className="text-xs text-primary-500 font-medium mb-1 uppercase tracking-wider">
-          {product.category}
+          {categoryName}
         </div>
         <h3 className="font-serif text-lg font-bold text-gray-900 dark:text-white mb-1">
           {product.name[language]}

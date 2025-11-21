@@ -33,6 +33,19 @@ export interface Translation {
     subtitle: string;
     cta: string;
   };
+  sections: {
+    shopByCategory: string;
+    featured: string;
+    viewAll: string;
+    testimonials: string;
+    newsletterTitle: string;
+    newsletterDesc: string;
+    subscribe: string;
+    emailPlaceholder: string;
+    promoTitle: string;
+    promoSubtitle: string;
+    promoBtn: string;
+  };
   shop: {
     title: string;
     filter: string;
