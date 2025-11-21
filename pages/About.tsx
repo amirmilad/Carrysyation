@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useLanguage } from '../components/Contexts';
 import { Shield, Users, Heart, Globe } from 'lucide-react';
@@ -48,7 +49,7 @@ export const About: React.FC = () => {
       {/* Hero Banner */}
       <div className="relative h-[60vh] w-full bg-gray-900 overflow-hidden">
         <img 
-          src="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop" 
+          src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=2071&auto=format&fit=crop" 
           alt="Artisan working on leather"
           className="absolute inset-0 w-full h-full object-cover opacity-60"
         />

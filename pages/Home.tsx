@@ -17,9 +17,9 @@ export const Home: React.FC = () => {
   // Extract unique categories for the "Shop By Category" section
   const categories = ['Tote', 'Crossbody', 'Satchel', 'Clutch'];
   
-  // Using the same high-quality images defined in constants (mapped manually for the home display)
+  // Reliable Unsplash Images matching the product types
   const categoryImages: Record<string, string> = {
-    'Tote': 'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=400&auto=format&fit=crop',
+    'Tote': 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=400&auto=format&fit=crop',
     'Crossbody': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=400&auto=format&fit=crop',
     'Satchel': 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=400&auto=format&fit=crop',
     'Clutch': 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?q=80&w=400&auto=format&fit=crop'
@@ -70,11 +70,11 @@ export const Home: React.FC = () => {
       {/* Hero Section */}
       <div className="relative h-[85vh] w-full bg-gray-900 overflow-hidden group">
         <img 
-          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop" 
-          alt="Hero"
-          className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-[20s]"
+          src="https://images.unsplash.com/photo-1559563458-527698bf5295?q=80&w=2070&auto=format&fit=crop" 
+          alt="Hero Fashion"
+          className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[20s]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/30 to-transparent" />
         <div className="absolute inset-0 flex items-center justify-center text-center px-4">
           <div className="max-w-4xl space-y-8 animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-serif font-bold text-white tracking-tight leading-tight drop-shadow-lg">
@@ -181,7 +181,7 @@ export const Home: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-20">
         <div className="relative rounded-2xl overflow-hidden h-[500px] shadow-2xl group">
           <img 
-            src="https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=2053&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=2053&auto=format&fit=crop" 
             alt="Promo"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />

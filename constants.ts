@@ -142,8 +142,8 @@ export const TRANSLATIONS: Record<'en' | 'ar', Translation> = {
 
 // Helper for detail images - High quality, reliable links
 const DETAIL_IMAGES = [
-  "https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?q=80&w=800&auto=format&fit=crop", // Detail 1
-  "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop", // Detail 2
+  "https://images.unsplash.com/photo-1590735266616-614e797964f9?q=80&w=800&auto=format&fit=crop", // Leather Detail
+  "https://images.unsplash.com/photo-1605733513597-a8f8341084e6?q=80&w=800&auto=format&fit=crop", // Bag Lifestyle
 ];
 
 export const MOCK_PRODUCTS: Product[] = [
@@ -156,10 +156,10 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1299,
     category: "Tote",
-    image: "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[0]
     ],
     colors: ["Brown", "Black"]
@@ -176,7 +176,7 @@ export const MOCK_PRODUCTS: Product[] = [
     image: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?q=80&w=800&auto=format&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[1]
     ],
     colors: ["Pink", "Silver", "Gold"]
@@ -210,7 +210,7 @@ export const MOCK_PRODUCTS: Product[] = [
     image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[1]
     ],
     colors: ["Green", "Black"]
@@ -224,10 +224,10 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1450,
     category: "Shoulder",
-    image: "https://images.unsplash.com/photo-1559563458-52c6952281ae?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1559563458-52c6952281ae?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[0]
     ],
     colors: ["Blue", "Cognac"]
@@ -244,7 +244,7 @@ export const MOCK_PRODUCTS: Product[] = [
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=800&auto=format&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1581605405669-fdaf8115b419?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[1]
     ],
     colors: ["Yellow", "Black"]
@@ -258,10 +258,10 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 2400,
     category: "Shoulder",
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[0]
     ],
     colors: ["Black", "Beige"]
@@ -275,9 +275,9 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1650,
     category: "Hobo",
-    image: "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1600857062241-98e5dba7f214?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1600857062241-98e5dba7f214?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[0],
       DETAIL_IMAGES[1]
     ],
@@ -292,11 +292,11 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 750,
     category: "Tote",
-    image: "https://images.unsplash.com/photo-1614179924047-e1ab49a0a0cf?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1566958765392-2f4a8c48949c?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1614179924047-e1ab49a0a0cf?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1523779105320-d1cd346ff52b?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1628149455676-7f886720d47e?q=80&w=800&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1566958765392-2f4a8c48949c?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1590735266616-614e797964f9?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop"
     ],
     colors: ["Beige", "Natural"]
   },
@@ -312,7 +312,7 @@ export const MOCK_PRODUCTS: Product[] = [
     image: "https://images.unsplash.com/photo-1564422167509-4f8763ff046e?q=80&w=800&auto=format&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1564422167509-4f8763ff046e?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[1]
     ],
     colors: ["White", "Black"]
@@ -326,9 +326,9 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1550,
     category: "Crossbody",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1575296093822-987648884c9a?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1575296093822-987648884c9a?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[0]
     ],
     colors: ["Tan", "Black"]
@@ -342,9 +342,9 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     price: 1350,
     category: "Bucket",
-    image: "https://images.unsplash.com/photo-1575296093822-987648884c9a?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1575296093822-987648884c9a?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1590739225287-bd31519780c3?q=80&w=800&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop",
       DETAIL_IMAGES[1]
     ],

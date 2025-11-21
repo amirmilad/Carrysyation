@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Moon, Sun, Menu, X, Globe, Search } from 'lucide-react';
+import { ShoppingBag, Moon, Sun, Menu, X, Globe, Search, Briefcase } from 'lucide-react';
 import { useTheme, useLanguage, useCart } from '../Contexts';
 import { TRANSLATIONS } from '../../constants';
 
@@ -33,15 +34,16 @@ export const Navbar: React.FC = () => {
         <div className="flex justify-between items-center">
           
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center rounded-sm font-serif font-bold text-2xl transition-transform group-hover:scale-105">
-              C
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center rounded-sm transition-transform group-hover:scale-105 shadow-lg">
+              {/* SVG Logo Mark */}
+              <Briefcase strokeWidth={2.5} size={20} />
             </div>
             <div className="flex flex-col">
               <span className="font-serif text-xl font-bold tracking-wide text-gray-900 dark:text-white leading-none">
                 CarryStation
               </span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Luxury Bags</span>
+              <span className="text-[10px] uppercase tracking-[0.25em] text-gray-500 dark:text-gray-400 mt-0.5">Luxury Bags</span>
             </div>
           </Link>
 
