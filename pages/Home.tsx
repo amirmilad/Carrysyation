@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Truck, RefreshCw, Star, Mail, Sparkles, Tag } from 'lucide-react';
 import { useLanguage } from '../components/Contexts';
@@ -7,64 +7,115 @@ import { TRANSLATIONS, MOCK_PRODUCTS, CATEGORY_NAMES } from '../constants';
 import { Button } from '../components/UI/Button';
 import { ProductCard } from '../components/Product/ProductCard';
 
-// --- Reusable Marquee Component ---
+// --- Physics-Based Interactive Marquee (Re-built from scratch) ---
 interface MarqueeProps {
-  speed: number;
+  baseSpeed: number; // Pixels per frame (e.g., 0.5 or 2.0)
   className?: string;
   children: React.ReactNode;
 }
 
-const Marquee: React.FC<MarqueeProps> = ({ speed, className = "", children }) => {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const { language } = useLanguage();
+const Marquee: React.FC<MarqueeProps> = ({ baseSpeed, className = "", children }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  
+  // State to track movement
+  const positionRef = useRef(0);
+  const requestRef = useRef<number>(0);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const lastXRef = useRef(0);
+  
+  // Clone children to ensure infinite loop visual
+  // We repeat content 4 times to ensure it covers screen width + buffer
+  const clones = [0, 1, 2, 3]; 
+
+  const animate = useCallback(() => {
+    if (!isDraggingRef.current && contentRef.current) {
+      // Move position by speed
+      positionRef.current -= baseSpeed;
+
+      const contentWidth = contentRef.current.scrollWidth / clones.length;
+      
+      // Infinite Loop Logic:
+      // If we have scrolled past the width of one clone set, reset position silently
+      if (positionRef.current <= -contentWidth) {
+        positionRef.current += contentWidth;
+      }
+      // Handle reverse case (if dragged too far right)
+      if (positionRef.current > 0) {
+        positionRef.current -= contentWidth;
+      }
+
+      // Apply transformation
+      if (contentRef.current) {
+        contentRef.current.style.transform = `translateX(${positionRef.current}px)`;
+      }
+    }
+    requestRef.current = requestAnimationFrame(animate);
+  }, [baseSpeed, clones.length]);
 
   useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
+    requestRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(requestRef.current);
+  }, [animate]);
 
-    let animationId: number;
+  // --- Touch / Drag Handlers ---
+  const handleStart = (clientX: number) => {
+    isDraggingRef.current = true;
+    startXRef.current = clientX;
+    lastXRef.current = positionRef.current;
     
-    // We duplicate content 4 times, so reset point is 1/4 of scrollWidth
-    // Wait, if we scroll Left, we increase scrollLeft.
-    // When we reach the end of the first set, we jump back to 0.
-    
-    const animate = () => {
-      if (!isPaused && el) {
-        el.scrollLeft += speed;
-        
-        // Reset logic for infinite loop
-        // If we've scrolled past the first set of content (approx), reset.
-        // Since we duplicate 4 times, we can reset when we reach 1/4 or 1/2.
-        // Safer to reset when >= scrollWidth / 2 if we duplicate even number of times.
-        // Let's use 4 copies. Reset at scrollWidth / 2 is safe.
-        if (el.scrollLeft >= el.scrollWidth / 2) {
-          el.scrollLeft = 0;
-        }
-      }
-      animationId = requestAnimationFrame(animate);
-    };
+    // Add grabbing cursor class
+    if (containerRef.current) containerRef.current.style.cursor = 'grabbing';
+  };
 
-    animationId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationId);
-  }, [speed, isPaused]);
+  const handleMove = (clientX: number) => {
+    if (!isDraggingRef.current || !contentRef.current) return;
+    
+    const delta = clientX - startXRef.current;
+    positionRef.current = lastXRef.current + delta;
+    
+    contentRef.current.style.transform = `translateX(${positionRef.current}px)`;
+  };
+
+  const handleEnd = () => {
+    isDraggingRef.current = false;
+    if (containerRef.current) containerRef.current.style.cursor = 'grab';
+  };
+
+  // Mouse Events
+  const onMouseDown = (e: React.MouseEvent) => handleStart(e.clientX);
+  const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
+  const onMouseUp = () => handleEnd();
+  const onMouseLeave = () => handleEnd();
+
+  // Touch Events
+  const onTouchStart = (e: React.TouchEvent) => handleStart(e.touches[0].clientX);
+  const onTouchMove = (e: React.TouchEvent) => handleMove(e.touches[0].clientX);
+  const onTouchEnd = () => handleEnd();
 
   return (
     <div 
-      ref={scrollerRef}
-      className={`overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] cursor-grab active:cursor-grabbing ${className}`}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setIsPaused(false)}
-      dir="ltr" // Force LTR for consistent scrolling direction (Leftwards)
+      ref={containerRef}
+      className={`overflow-hidden relative select-none cursor-grab touch-pan-y ${className}`}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseLeave}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      dir="ltr" // Force LTR so X-axis math is consistent (Negative = Left)
     >
-      <div className="inline-flex items-center h-full">
-        {/* Render children multiple times for seamless loop */}
-        {children}
-        {children}
-        {children}
-        {children}
+      <div 
+        ref={contentRef}
+        className="flex w-max items-center will-change-transform"
+      >
+        {clones.map((i) => (
+          <div key={i} className="flex-shrink-0 flex items-center">
+            {children}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -109,7 +160,6 @@ export const Home: React.FC = () => {
     }
   ];
 
-  // Fake logos for "As Seen In"
   const brands = [
     "VOGUE", "ELLE", "Harper's BAZAAR", "Marie Claire", "COSMOPOLITAN"
   ];
@@ -117,37 +167,44 @@ export const Home: React.FC = () => {
   return (
     <div className="animate-fade-in flex flex-col pb-16 overflow-hidden bg-white dark:bg-gray-950">
       
-      {/* Marquee 1: General Info (Slow) */}
-      <Marquee speed={0.8} className="bg-gray-900 text-white py-2.5 border-b border-gray-800">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className={`inline-flex items-center gap-8 mx-4 ${language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
-            <span className={`text-xs font-bold uppercase flex items-center gap-3 ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
-              <Sparkles size={10} className="text-gold-400" /> 
+      {/* Marquee 1: General Info (Slow - Speed 0.6) */}
+      <Marquee baseSpeed={0.6} className="bg-gray-900 text-white py-3 border-b border-gray-800 z-10 relative">
+        <div className={`flex items-center ${language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+          <div className="flex items-center gap-8 px-4">
+             <span className={`text-xs font-bold uppercase flex items-center gap-3 whitespace-nowrap ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
+              <Sparkles size={12} className="text-gold-400" /> 
               {language === 'en' ? 'New Collection Available' : 'تشكيلة جديدة متاحة'}
             </span>
-            <span className={`text-xs font-bold uppercase flex items-center gap-3 ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
-              <Sparkles size={10} className="text-gold-400" /> 
+            <span className={`text-xs font-bold uppercase flex items-center gap-3 whitespace-nowrap ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
+              <Sparkles size={12} className="text-gold-400" /> 
               {language === 'en' ? 'Free Worldwide Shipping' : 'شحن مجاني لجميع أنحاء العالم'}
             </span>
+            <span className={`text-xs font-bold uppercase flex items-center gap-3 whitespace-nowrap ${language === 'ar' ? 'tracking-normal' : 'tracking-[0.2em]'}`}>
+              <Sparkles size={12} className="text-gold-400" /> 
+              {language === 'en' ? 'Authentic Italian Leather' : 'جلد إيطالي طبيعي'}
+            </span>
           </div>
-        ))}
+        </div>
       </Marquee>
 
-      {/* Marquee 2: Offers (Fast) */}
-      <Marquee speed={2.5} className="bg-gold-400 text-gray-900 py-2 shadow-md">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className={`inline-flex items-center gap-8 mx-4 ${language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
-            <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
-              <Tag size={14} fill="currentColor" className="text-gray-900" /> 
+      {/* Marquee 2: Offers (Fast - Speed 2.5) */}
+      <Marquee baseSpeed={2.5} className="bg-gold-400 text-gray-900 py-2.5 shadow-md z-10 relative">
+         <div className={`flex items-center ${language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+          <div className="flex items-center gap-12 px-6">
+            <span className={`text-sm font-bold uppercase flex items-center gap-2 whitespace-nowrap ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
+              <Tag size={16} fill="currentColor" className="text-gray-900" /> 
               {language === 'en' ? 'SUMMER SALE: UP TO 40% OFF' : 'تخفيضات الصيف: خصم يصل إلى 40%'}
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
-            <span className={`text-sm font-bold uppercase flex items-center gap-2 ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
+            <span className="w-2 h-2 rounded-full bg-gray-900 shrink-0"></span>
+            <span className={`text-sm font-bold uppercase flex items-center gap-2 whitespace-nowrap ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
               {language === 'en' ? 'USE CODE: LUXURY25' : 'استخدمي كود: LUXURY25'}
             </span>
-             <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
+             <span className="w-2 h-2 rounded-full bg-gray-900 shrink-0"></span>
+             <span className={`text-sm font-bold uppercase flex items-center gap-2 whitespace-nowrap ${language === 'ar' ? 'tracking-normal' : 'tracking-widest'}`}>
+              {language === 'en' ? 'Limited Time Offer' : 'عرض لفترة محدودة'}
+            </span>
           </div>
-        ))}
+        </div>
       </Marquee>
 
       {/* Hero Section */}
